@@ -82,10 +82,12 @@ public class SQLFunctions {
 
         try {
             Connection conn = DriverManager.getConnection(url);
-            String baseSQL = "DROP TABLE ?";
+            conn.setAutoCommit(false);
+            String baseSQL = "DROP TABLE " + subject;
             try (PreparedStatement stmt = conn.prepareStatement(baseSQL)){
-                stmt.setString(1, subject);
-                stmt.executeQuery();
+                stmt.executeUpdate();
+                conn.commit();
+                conn.close();
             }
         }
         catch (Exception e){
