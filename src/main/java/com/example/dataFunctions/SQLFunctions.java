@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-//TODO: Add functions to clear all tables of workbook.db
-
 public class SQLFunctions {
     final static String url = "jdbc:sqlite:workbook.db";
 
@@ -77,5 +75,21 @@ public class SQLFunctions {
         }
         return new HashMap<>();
 
+    }
+
+    public static void dropSubject(String subject){
+        try {Class.forName("org.sqlite.JDBC");} catch (ClassNotFoundException e) {e.printStackTrace();}
+
+        try {
+            Connection conn = DriverManager.getConnection(url);
+            String baseSQL = "DROP TABLE ?";
+            try (PreparedStatement stmt = conn.prepareStatement(baseSQL)){
+                stmt.setString(1, subject);
+                stmt.executeQuery();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
