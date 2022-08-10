@@ -73,7 +73,7 @@ public class Excel2SQL {
                 while (cellIterator.hasNext()){
                     i++;
                     Cell cell = cellIterator.next();
-                    statement.setString(i, cell.toString());
+                    statement.setString(i, cell.toString().trim());
                     if (i == 1){
                         SubjectMetaData.addToStudentList(cell.toString());
                     }
