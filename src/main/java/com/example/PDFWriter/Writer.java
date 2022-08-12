@@ -7,7 +7,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import org.apache.poi.xdgf.util.Util;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -26,7 +25,7 @@ public class Writer {
     static String filePath;
 
     //Different fonts for different parts of the pdf
-    static Font boldTestFont = FontFactory.getFont("Calibri", 15, Font.BOLD);
+    static Font boldTestFont = FontFactory.getFont("Calibri", 14, Font.BOLD);
     static Font boldFont = FontFactory.getFont("Calibri", 12, Font.BOLD);
     static Font cellFont = FontFactory.getFont("Calibri", 11);
     static BaseColor color = new BaseColor(248,203,173,255);//Color for subject+teacher name
@@ -58,7 +57,7 @@ public class Writer {
             document.addSubject("Report card generated for "+filename);
 
             //Scaling the image
-            Image header = Image.getInstance(ClassLoader.getSystemResource("fiitjee_header.png"));
+            Image header = Image.getInstance(ClassLoader.getSystemResource("header.png"));
             header.scalePercent(83);
 
             //Adding image as a cell in a table that spans 2 columns
