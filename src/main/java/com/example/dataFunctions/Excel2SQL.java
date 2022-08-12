@@ -29,7 +29,7 @@ public class Excel2SQL {
     }
 
 
-    public void build(){
+    public void build(String teacherName){
         try {Class.forName("org.sqlite.JDBC");} catch (ClassNotFoundException e) {e.printStackTrace();}
         try{
             buildTable(); //Building the table in DB file
@@ -46,7 +46,9 @@ public class Excel2SQL {
 
             //Creating SQL for insertion of values
             ArrayList<String> columnNames = GetColumns();
-            StringBuilder baseSQL = new StringBuilder("INSERT INTO " + subject + " (");
+
+            //Ugly bit of code. Will make it better in future updates.....maybe
+            StringBuilder baseSQL = new StringBuilder("INSERT INTO " + subject.replaceAll("[^A-Za-z0-9]", "") + " (");
             StringBuilder suffix = new StringBuilder("(");
             for (int i = 0; i < columnNames.size(); i++){
                 String val = columnNames.get(i);
@@ -85,7 +87,7 @@ public class Excel2SQL {
             conn.close();
             workbook.close();
 
-            SubjectMetaData.createSubject(subject, columnNames);
+            SubjectMetaData.createSubject(subject, columnNames, teacherName);
         }
         catch (SQLException | IOException e){
             e.printStackTrace();
@@ -124,7 +126,7 @@ public class Excel2SQL {
             columnNames.set(0, "name"); //Setting first column as name
 
             //Forming SQL statement from ArrayList of column names
-            StringBuilder baseSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + subject + " (");
+            StringBuilder baseSQL = new StringBuilder("CREATE TABLE IF NOT EXISTS " + subject.replaceAll("[^A-Za-z0-9]", "") + " (");
             for (int i = 0; i < columnNames.size(); i++) {
                 String val = columnNames.get(i);
                 //Cleaning the column names for SQL
