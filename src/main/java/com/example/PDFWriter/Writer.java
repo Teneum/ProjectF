@@ -7,6 +7,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.apache.poi.xdgf.util.Util;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -18,12 +19,11 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 
-//TODO: Set report name to bold
-
 public class Writer {
 
     static Document document;
     static String filename;
+    static String filePath;
 
     //Different fonts for different parts of the pdf
     static Font boldTestFont = FontFactory.getFont("Calibri", 15, Font.BOLD);
@@ -31,15 +31,11 @@ public class Writer {
     static Font cellFont = FontFactory.getFont("Calibri", 11);
     static BaseColor color = new BaseColor(248,203,173,255);//Color for subject+teacher name
 
-    public Writer(String studentName){
+    public Writer(String studentName, String fileDir){
         filename = studentName;
+        filePath = fileDir;
     }
 
-    public static void main(String[] args){
-        Writer obj = new Writer("A");
-        obj.createReport();
-        obj.closeDocument();
-    }
 
     public void createReport(){
         initializeDocument();
@@ -49,7 +45,7 @@ public class Writer {
     private void initializeDocument(){
        document = new Document();
 
-        String exactFilename = filename + ".pdf"; //As filename is also the name of the student
+        String exactFilename = filePath + "\\" + filename + ".pdf"; //As filename is also the name of the student
 
         try {
             String[] testDetails = SubjectMetaData.getTestDetail();
@@ -57,7 +53,7 @@ public class Writer {
             PdfWriter.getInstance(document, new FileOutputStream(exactFilename));
             document.open();
 
-            document.addAuthor("TheTool");
+            document.addAuthor("Report Builder");
             document.addCreationDate();
             document.addSubject("Report card generated for "+filename);
 
@@ -118,10 +114,12 @@ public class Writer {
 
     private static void createSubjectTable(String Subject){
 
+        //Creating a table for subject and configuring the width and gap between tables
         PdfPTable reportTable = new PdfPTable(5);
         reportTable.setWidthPercentage(95);
-        //reportTable.setSpacingAfter(15f);
+        reportTable.setSpacingAfter(15f);
 
+        //Setting Column widths
         try {
             float[] columnWidths = {5f, 2f, 2f, 2f, 2f};
             reportTable.setWidths(columnWidths);
@@ -167,7 +165,7 @@ public class Writer {
             PdfPCell testName = new PdfPCell(new Phrase(test +" / "+ testData.get("ConductedDate").toString(),
                     cellFont));
             PdfPCell marksOb = new PdfPCell(new Phrase(Utility.parseTrailingZero(studentMarks.get(test)), cellFont));
-            PdfPCell maxM = new PdfPCell(new Phrase(testData.get("OutOf").toString(), cellFont));
+            PdfPCell maxM = new PdfPCell(new Phrase(Utility.parseTrailingZero(testData.get("OutOf").toString()), cellFont));
             PdfPCell classAvg = new PdfPCell(new Phrase(Utility.parseTrailingZero(testData.get("Average").toString()),
                     cellFont));
             PdfPCell highScore = new PdfPCell(new Phrase(Utility.parseTrailingZero(testData.get("MaxM").toString()),
