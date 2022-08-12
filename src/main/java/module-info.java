@@ -9,6 +9,7 @@ module com.example.projectf {
     requires org.apache.poi.ooxml;
     requires json.simple;
     requires itextpdf;
+    requires org.apache.commons.io;
 
     opens com.example.projectF to javafx.fxml;
     exports com.example.projectF;
