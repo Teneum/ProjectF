@@ -10,58 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-//TODO: Add function to clear contents of .json file
 
 public class SubjectMetaData {
-    final static String file = "metadata.json";
+    final static String file = LocationInit.getPath() + "\\metadata.json";
 
-    public static void main(String[] args){
-        HashMap<String, Object> dict = getSubjectTestMetaData("maths", "Test 1");
-        System.out.println(dict);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void createSubject(String subject, ArrayList<String> columnNames){
-        try {
-            initialise();
-            columnNames.remove(0);
-
-            JSONObject metadata = getMetaData();
-
-            //Creating a JSONObject to store test name as key and value as JSONObject of metadata
-            JSONObject subjectHeader = new JSONObject();
-            for (String i : columnNames){
-                String j = i.replaceAll("[^A-Za-z0-9]", "");
-                JSONObject data = new JSONObject();
-                List<Number> marks = SQLFunctions.getTestMarks(subject, j); //Fetching marks of test
-
-                //Calculating metadata
-                float avg = Average(marks);
-                Number max = Max(marks);
-
-                data.put("Average", avg); //Average marks in the class
-                data.put("MaxM", max); //Maximum marks obtained by a student
-                data.put("OutOf", 0);//Maximum marks possible
-                data.put("ConductedDate", "none");//Date on which test was held
-                subjectHeader.put(i, data);
-            }
-            JSONArray tests = new JSONArray();
-            tests.addAll(columnNames);
-
-            subjectHeader.put("Tests", tests); //Adding JSONArray with elements being the name of all the tests
-            subjectHeader.put("Teacher", "null"); //Adding teacher name to subject data
-
-            metadata.put(subject, subjectHeader); //Writing Subject JSONObject
-
-            JSONArray subjectList = (JSONArray) metadata.get("Subjects");
-            subjectList.add(subject);
-            write(metadata);
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 
     @SuppressWarnings("unchecked")
     public static void createSubject(String subject, ArrayList<String> columnNames, String teacher){
@@ -231,6 +183,7 @@ public class SubjectMetaData {
             JSONParser jsonParser = new JSONParser();
             FileReader reader = new FileReader(file);
             Object obj = jsonParser.parse(reader);
+            reader.close();
             return (JSONObject) obj;
         }
         catch (Exception e){
@@ -259,6 +212,11 @@ public class SubjectMetaData {
         subjectData.put("Teacher", name);
     }
 
+    public static JSONArray getSubjectTests(String subject){
+        JSONObject metadata = getMetaData();
+        JSONObject subjectData = (JSONObject) metadata.get(subject);
+        return (JSONArray) subjectData.get("Tests");
+    }
 
     public static String getTeacher(String subject){
         JSONObject metadata = getMetaData();
@@ -293,5 +251,13 @@ public class SubjectMetaData {
         JSONObject metadata = getMetaData();
         JSONObject studentData = (JSONObject) metadata.get("StudentData");
         return  studentData.keySet();
+    }
+
+    public static void delSubject(String subject){
+        JSONObject metadata = getMetaData();
+        JSONArray subjectList = (JSONArray) metadata.get("Subjects");
+        subjectList.remove(subject);
+        metadata.remove(subject);
+        write(metadata);
     }
 }

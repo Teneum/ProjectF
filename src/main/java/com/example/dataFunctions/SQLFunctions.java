@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SQLFunctions {
-    final static String url = "jdbc:sqlite:workbook.db";
+    final static String url = "jdbc:sqlite:" + LocationInit.getPath() + "\\workbook.db";
 
     public static void main(String[] args){
         HashMap<String, String> l = getStudentMarks("A", "maths");

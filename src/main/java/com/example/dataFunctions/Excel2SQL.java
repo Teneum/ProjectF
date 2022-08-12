@@ -19,7 +19,7 @@ public class Excel2SQL {
     //Creating class constructor
     static String filepath;
     static String subject;
-    static final String url = "jdbc:sqlite:workbook.db";
+    static final String url = "jdbc:sqlite:" + LocationInit.getPath() + "\\workbook.db";
 
     public Excel2SQL(String file, String sub){
         //Params: file -> Specify the Excel sheet from which data has to be pulled
@@ -147,21 +147,4 @@ public class Excel2SQL {
         }
     }
 
-    private static boolean tableExists(){
-        //Checking if table for subject exists
-        try {Class.forName("org.sqlite.JDBC");} catch (ClassNotFoundException e) {e.printStackTrace();}
-
-        try {
-        Connection conn = DriverManager.getConnection(url);
-            DatabaseMetaData md = conn.getMetaData();
-            ResultSet rs = md.getTables(null, null, subject, null);
-            rs.last();
-            conn.close();
-            return rs.getRow() > 0;
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
 }
