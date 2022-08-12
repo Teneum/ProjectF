@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -21,6 +22,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Main extends Application {
 
@@ -39,6 +41,7 @@ public class Main extends Application {
 
         window = primaryStage;
         window.setTitle("Report Builder - Version 0.1");
+        window.getIcons().add(new Image(Objects.requireNonNull(ClassLoader.getSystemResourceAsStream("icon.png"))));
         generateReport.setDisable(true);
 
         VBox container = new VBox();
