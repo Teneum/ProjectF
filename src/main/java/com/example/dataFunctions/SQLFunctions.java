@@ -23,7 +23,7 @@ public class SQLFunctions {
 
             //SQL Query being assigned to a temporary ArrayList
             List<String> marks = new ArrayList<>();
-            String baseSQL = "SELECT " + test + " FROM " + subject;
+            String baseSQL = "SELECT " + test + " FROM " + subject.replaceAll("[^A-Za-z0-9]", "");
             try (ResultSet rs = cursor.executeQuery(baseSQL)){
                 while (rs.next()){
                     marks.add(rs.getString(1));
@@ -57,7 +57,7 @@ public class SQLFunctions {
             List<String> marks = new ArrayList<>();
             List<String> testNames = SubjectMetaData.subjectTests(subject);
 
-            String baseSQL = "SELECT * FROM " + subject + " WHERE name = ?";
+            String baseSQL = "SELECT * FROM " + subject.replaceAll("[^A-Za-z0-9]", "") + " WHERE name = ?";
             try(PreparedStatement stmt = conn.prepareStatement(baseSQL)){
                 stmt.setString(1, name);
 
@@ -83,7 +83,7 @@ public class SQLFunctions {
         try {
             Connection conn = DriverManager.getConnection(url);
             conn.setAutoCommit(false);
-            String baseSQL = "DROP TABLE " + subject;
+            String baseSQL = "DROP TABLE " + subject.replaceAll("[^A-Za-z0-9]", "");
             try (PreparedStatement stmt = conn.prepareStatement(baseSQL)){
                 stmt.executeUpdate();
                 conn.commit();
