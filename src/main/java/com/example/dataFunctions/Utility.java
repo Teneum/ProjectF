@@ -1,16 +1,16 @@
 package com.example.dataFunctions;
 
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
 public class Utility {
-
-    public static void deleteDB(String file) {
-        File f = new File(file);
-        f.delete();
-    }
 
     public static HashMap<String, String> map(List<String> keys, List<String> values)
     {
@@ -46,4 +46,25 @@ public class Utility {
         }
     }
 
+    //Method to create a sample Excel file for end user
+    public static XSSFWorkbook createSampleSpreadsheet(){
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        try {
+            String filename = "sample.xlsx";
+
+            XSSFSheet sheet = workbook.createSheet();
+            XSSFRow rowHead = sheet.createRow((short)0);
+
+            rowHead.createCell(0).setCellValue("Student");
+            rowHead.createCell(1).setCellValue("Test 1");
+            rowHead.createCell(2).setCellValue("Test 2");
+            rowHead.createCell(3).setCellValue("Test 3");
+
+            return workbook;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return workbook;
+    }
 }
