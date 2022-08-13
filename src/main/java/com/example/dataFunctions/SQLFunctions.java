@@ -8,11 +8,6 @@ import java.util.List;
 public class SQLFunctions {
     final static String url = "jdbc:sqlite:" + LocationInit.getPath() + "\\workbook.db";
 
-    public static void main(String[] args){
-        HashMap<String, String> l = getStudentMarks("A", "maths");
-        System.out.println(l);
-    }
-
     public static List<Number> getTestMarks(String subject, String test){
 
         try {Class.forName("org.sqlite.JDBC");} catch (ClassNotFoundException e) {e.printStackTrace();}

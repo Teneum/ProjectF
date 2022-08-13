@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 
 
 public class Excel2SQL {
@@ -77,7 +78,7 @@ public class Excel2SQL {
                     Cell cell = cellIterator.next();
                     statement.setString(i, cell.toString().trim());
                     if (i == 1){
-                        SubjectMetaData.addToStudentList(cell.toString());
+                        SubjectMetaData.addToStudentList(cell.toString().toUpperCase(Locale.ROOT));
                     }
                 }
                 statement.addBatch();
